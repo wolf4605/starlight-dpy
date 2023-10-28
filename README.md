@@ -10,7 +10,7 @@ Feel free to open an issue if you found any bugs!🌷
 
 ### Installation
 ```
-pip install git+https://github.com/InterStella0/starlight-dpy
+pip install git+https://github.com/wolf4605/starlight-dpy
 ```
 
 # Help Command
