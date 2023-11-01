@@ -410,14 +410,13 @@ class MenuHelpCommand(HelpHybridCommand):
             The value to be display on the Message.
         """
         title = "Help Command"
-        if view.max_pages > 1:
-            title += f" ({view.current_page + 1}/{view.max_pages})"
-
         embed = discord.Embed(
             title=title,
             description=self.context.bot.description if view.current_page == 0 else None,
             color=self.accent_color
         )
+		if view.max_pages > 1:
+            embed.set_footer(text = f"Page : {view.current_page + 1}/{view.max_pages}")
         data = [(cog, cmds) for cog, cmds in mapping.items()]
         data.sort(key=lambda d: self.resolve_cog_name(d[0]))
         for cog, cmds in data:
@@ -445,7 +444,7 @@ class MenuHelpCommand(HelpHybridCommand):
             The value to be display on the Message.
         """
 
-        title = f"{self.resolve_cog_name(view.cog)} ({view.current_page + 1}/{view.max_pages})"
+        title = f"{self.resolve_cog_name(view.cog)}"
         desc = ""
         if view.current_page == 0:
             desc = getattr(view.cog, "description", None) or self.no_documentation
@@ -453,11 +452,13 @@ class MenuHelpCommand(HelpHybridCommand):
             desc += f"\n\n**Commands[`{len(all_cmds)}`]**\n"
 
         list_cmds = "\n".join([self.format_command_brief(cmd) for cmd in cmds])
-        return discord.Embed(
+        emb = discord.Embed(
             title=title,
             description=f"{desc}{list_cmds}",
             color=self.accent_color
         )
+		emb.set_footer(text=f' Page : {view.current_page + 1}/{view.max_pages}')
+		return emb
 
     async def fuzzy_search_command_cog(self, query: str
                                        ) -> List[Union[_Command, commands.Cog]]:
@@ -519,8 +520,10 @@ class PaginateHelpCommand(MenuHelpCommand):
         """
         current_page = view.current_page
         first_cmd = cmds[0]
-        return discord.Embed(
-            title=f"Help Command ({self.resolve_cog_name(first_cmd.cog)}) [{current_page + 1}/{view.max_pages}]",
+        em = discord.Embed(
+            title=f"Help Command ({self.resolve_cog_name(first_cmd.cog)})",
             description="\n".join([self.format_command_brief(c) for c in cmds]),
             color=self.accent_color
         )
+		em.set_footer(text=f'Page : {current_page + 1}/{view.max_pages}')
+		return em
