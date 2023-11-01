@@ -415,7 +415,7 @@ class MenuHelpCommand(HelpHybridCommand):
             description=self.context.bot.description if view.current_page == 0 else None,
             color=self.accent_color
         )
-		if view.max_pages > 1:
+        if view.max_pages > 1:
             embed.set_footer(text = f"Page : {view.current_page + 1}/{view.max_pages}")
         data = [(cog, cmds) for cog, cmds in mapping.items()]
         data.sort(key=lambda d: self.resolve_cog_name(d[0]))
@@ -457,8 +457,8 @@ class MenuHelpCommand(HelpHybridCommand):
             description=f"{desc}{list_cmds}",
             color=self.accent_color
         )
-		emb.set_footer(text=f' Page : {view.current_page + 1}/{view.max_pages}')
-		return emb
+        emb.set_footer(text=f' Page : {view.current_page + 1}/{view.max_pages}')
+        return emb
 
     async def fuzzy_search_command_cog(self, query: str
                                        ) -> List[Union[_Command, commands.Cog]]:
@@ -525,5 +525,5 @@ class PaginateHelpCommand(MenuHelpCommand):
             description="\n".join([self.format_command_brief(c) for c in cmds]),
             color=self.accent_color
         )
-		em.set_footer(text=f'Page : {current_page + 1}/{view.max_pages}')
-		return em
+        em.set_footer(text=f'Page : {current_page + 1}/{view.max_pages}')
+        return em
