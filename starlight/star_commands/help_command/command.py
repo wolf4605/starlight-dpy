@@ -423,7 +423,7 @@ class MenuHelpCommand(HelpHybridCommand):
             name_resolved = self.resolve_cog_name(cog)
             value = getattr(cog, "description", None) or self.no_documentation
             name = f"{name_resolved} (`{len(cmds)}`)"
-            embed.add_field(name=name, value=value, inline=self.inline_fields)
+            embed.add_field(name=f"- name", value=value, inline=self.inline_fields)
 
         return embed
 
@@ -451,10 +451,10 @@ class MenuHelpCommand(HelpHybridCommand):
             all_cmds = [*itertools.chain.from_iterable(view.data_source)]
             desc += f"\n\n**Commands[`{len(all_cmds)}`]**\n"
 
-        list_cmds = "\n".join([self.format_command_brief(cmd) for cmd in cmds])
+        list_cmds = "\n- ".join([self.format_command_brief(cmd) for cmd in cmds])
         emb = discord.Embed(
             title=title,
-            description=f"- {desc}{list_cmds}",
+            description=f"{desc}{list_cmds}",
             color=self.accent_color
         )
         emb.set_footer(text=f' Page : {view.current_page + 1}/{view.max_pages}')
