@@ -454,7 +454,7 @@ class MenuHelpCommand(HelpHybridCommand):
         list_cmds = "\n".join([self.format_command_brief(cmd) for cmd in cmds])
         emb = discord.Embed(
             title=title,
-            description=f"{desc}{list_cmds}",
+            description=f"- {desc}{list_cmds}",
             color=self.accent_color
         )
         emb.set_footer(text=f' Page : {view.current_page + 1}/{view.max_pages}')
