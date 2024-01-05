@@ -72,15 +72,19 @@ class ViewAuthor(discord.ui.View):
         """Implements after processing when the view was stopped or on_timeout triggers."""
         if self.message is None:
             return
-
+    
         if self.delete_after:
             await self.message.delete(delay=0)
             return
-
+    
         for child in self.children:
             child.disabled = True
+    
+        try:
+            await self.message.edit(view=self)
+        except:
+            pass
 
-        await self.message.edit(view=self)
 
     async def start(self, context: commands.Context, *args: Any, **kwargs: Any) -> None:
         """Starts the view by sending a message
