@@ -122,7 +122,7 @@ class MenuHelpCommand(HelpHybridCommand):
             The signature for the command.
         """
         brief = self.get_command_description(command, brief=True) or self.no_documentation
-        return f"`{self.get_command_signature(command)}`\n{brief}"
+        return f"`{self.get_command_signature(command)}`\n{brief}\n"
 
     async def format_group_detail(self, view: HelpMenuGroup) -> _OptionalFormatReturns:
         """Interface to display a detail description of a Group command.
