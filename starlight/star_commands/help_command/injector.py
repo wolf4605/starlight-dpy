@@ -665,12 +665,29 @@ class HelpHybridCommand(commands.HelpCommand):
 
         return mapping
 
-    def get_all_commands(self) -> Dict[Optional[commands.Cog], List[CommandTextApp]]:
-        """Retrieves bot the text command and app command bot mapping.
+    # def get_all_commands(self) -> Dict[Optional[commands.Cog], List[CommandTextApp]]:
+    #     """Retrieves bot the text command and app command bot mapping.
 
+    #     Returns
+    #     --------
+
+    #         Dict[Optional[:class:`~discord.ext.commands.Cog`], List[Union[:class:`~discord.ext.commands.Command`, :class:`~discord.app_commands.Command`, :class:`~discord.app_commands.Group`]]
+    #             A mapping of cog with text and app commands associated with it.
+    #     """
+    #     mapping = self.get_bot_mapping()
+    #     if self.include_apps:
+    #         app_mapping = self.get_bot_app_mapping()
+    #         for cog, app_cmds in app_mapping.items():
+    #             mapping.setdefault(cog, []).extend(app_cmds)
+
+    #     return mapping
+        
+    def get_all_commands(self) -> Dict[Optional[commands.Cog], List[CommandTextApp]]:
+        """Retrieves both the text command and app command bot mapping.
+    
         Returns
         --------
-
+    
             Dict[Optional[:class:`~discord.ext.commands.Cog`], List[Union[:class:`~discord.ext.commands.Command`, :class:`~discord.app_commands.Command`, :class:`~discord.app_commands.Group`]]
                 A mapping of cog with text and app commands associated with it.
         """
@@ -679,7 +696,16 @@ class HelpHybridCommand(commands.HelpCommand):
             app_mapping = self.get_bot_app_mapping()
             for cog, app_cmds in app_mapping.items():
                 mapping.setdefault(cog, []).extend(app_cmds)
-
+    
+        for cog, cmds in list(mapping.items()):
+            if cmds and cog:
+                for cmd in cmds:
+                    if isinstance(cmd, commands.Group):
+                        subcommands = cmd.commands
+                        for subcmd in subcommands:
+                            subcmd._cog = cog 
+                        mapping.setdefault(cog, []).extend(subcommands)
+    
         return mapping
 
     def get_destination(self) -> discord.abc.Messageable:
