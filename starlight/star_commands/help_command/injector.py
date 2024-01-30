@@ -684,10 +684,10 @@ class HelpHybridCommand(commands.HelpCommand):
         
     def get_all_commands(self) -> Dict[Optional[commands.Cog], List[CommandTextApp]]:
         """Retrieves both the text command and app command bot mapping.
-    
+
         Returns
         --------
-    
+
             Dict[Optional[:class:`~discord.ext.commands.Cog`], List[Union[:class:`~discord.ext.commands.Command`, :class:`~discord.app_commands.Command`, :class:`~discord.app_commands.Group`]]
                 A mapping of cog with text and app commands associated with it.
         """
@@ -696,16 +696,17 @@ class HelpHybridCommand(commands.HelpCommand):
             app_mapping = self.get_bot_app_mapping()
             for cog, app_cmds in app_mapping.items():
                 mapping.setdefault(cog, []).extend(app_cmds)
-    
+
         for cog, cmds in list(mapping.items()):
             if cmds and cog:
+                subcommands = []
                 for cmd in cmds:
                     if isinstance(cmd, commands.Group):
-                        subcommands = cmd.commands
-                        for subcmd in subcommands:
-                            subcmd._cog = cog 
-                        mapping.setdefault(cog, []).extend(subcommands)
-    
+                        subcommands.extend(cmd.commands)
+                    else:
+                        subcommands.append(cmd)
+                mapping[cog] = subcommands
+
         return mapping
 
     def get_destination(self) -> discord.abc.Messageable:
