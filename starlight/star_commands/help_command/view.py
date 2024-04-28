@@ -82,7 +82,7 @@ class MenuDropDown(discord.ui.Select):
         label = getattr(cog, "qualified_name", None) or self.no_category
         return discord.SelectOption(label=label, description=brief)
 
-    def get_cog_name(cog: Optional[commands.Cog]) -> str:
+    def get_cog_name(self, cog: Optional[commands.Cog]) -> str:
         """
         This function takes a commands.Cog object and returns its name.
         If the cog is None, it returns an empty string.
