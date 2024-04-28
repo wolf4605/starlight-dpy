@@ -93,7 +93,7 @@ class MenuDropDown(discord.ui.Select):
         options = []
 
         #Sorting the Cogs in aplhabetical order
-        cogs = sorted(cogs, key=lambda cog: get_cog_name(cog))
+        cogs = sorted(cogs, key=lambda cog: self.get_cog_name(cog))
         
         for cog in cogs:
             option = self.create_category_option(cog)
