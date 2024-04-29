@@ -420,6 +420,8 @@ class MenuHelpCommand(HelpHybridCommand):
         data = [(cog, cmds) for cog, cmds in mapping.items()]
         data.sort(key=lambda d: self.resolve_cog_name(d[0]))
         for cog, cmds in data:
+            if cog is None:
+                continue
             name_resolved = self.resolve_cog_name(cog)
             value = getattr(cog, "description", None) or self.no_documentation
             name = f"{name_resolved} (`{len(cmds)}`)"
