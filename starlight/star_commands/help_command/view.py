@@ -92,18 +92,17 @@ class MenuDropDown(discord.ui.Select):
     def set_cogs(self, cogs: List[Optional[commands.Cog]]) -> None:
         options = []
 
-        #Sorting the Cogs in aplhabetical order
+        # Sorting the Cogs in alphabetical order
         cogs = sorted(cogs, key=lambda cog: self.get_cog_name(cog))
 
-        x=0
         for cog in cogs:
-            # if x==0:
-            #     x = x+1
-            #     pass
-            # else:
-                option = self.create_category_option(cog)
-                options.append(option)
-                self.__cog_mapping[option.label] = cog
+            if cog is None:
+                continue
+            if cog.qualified_name == "Help Commands":
+                continue
+            option = self.create_category_option(cog)
+            options.append(option)
+            self.__cog_mapping[option.label] = cog
 
         self.options = options
 
