@@ -97,9 +97,9 @@ class MenuDropDown(discord.ui.Select):
 
         x=0
         for cog in cogs:
-            if x==0:
-                x = x+1
-                pass
+            # if x==0:
+            #     x = x+1
+            #     pass
             else:
                 option = self.create_category_option(cog)
                 options.append(option)
