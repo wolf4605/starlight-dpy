@@ -69,6 +69,7 @@ class MenuHelpCommand(HelpHybridCommand):
     """
 
     def __init__(self, *,
+                 defer: bool = False,
                  per_page: int = 6,
                  sort_commands: bool = True,
                  no_documentation: str = "No Documentation",
@@ -315,6 +316,8 @@ class MenuHelpCommand(HelpHybridCommand):
         mapping: Mapping[Optional[:class:`~discord.ext.commands.Cog`], List[:class:`~discord.ext.commands.Command`]]
             Mapping of Cog and list of Command associated with it.
         """
+        if self.defer:
+            await self.context.defer()
         filtered_commands = await self.cog_filter_commands(mapping)
         view = await self.view_provider.provide_bot_view(filtered_commands)
         await self.initiate_view(view)
@@ -349,6 +352,8 @@ class MenuHelpCommand(HelpHybridCommand):
         cog: commands.Cog
             The cog instance that was requested.
         """
+        if self.defer:
+            await self.context.defer()
         cmds = await self.filter_commands(cog.walk_commands(), sort=self.sort_commands)
         view = await self.view_provider.provide_cog_view(cog, cmds)
         await self.initiate_view(view)
@@ -363,6 +368,8 @@ class MenuHelpCommand(HelpHybridCommand):
         command: :class:`~discord.ext.commands.Command`
             The command instance that was requested.
         """
+        if self.defer:
+            await self.context.defer()
         view = await self.view_provider.provide_command_view(command)
         await self.initiate_view(view)
 
@@ -389,6 +396,8 @@ class MenuHelpCommand(HelpHybridCommand):
         error: :class:`str`
             The error message that will be displayed onto the user.
         """
+        if self.defer:
+            await self.context.defer()
         view = await self.view_provider.provide_error_view(error)
         await self.initiate_view(view)
 
