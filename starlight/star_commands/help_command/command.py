@@ -82,6 +82,7 @@ class MenuHelpCommand(HelpHybridCommand):
                  with_app_command: bool = False,
                  **options):
         super().__init__(with_app_command=with_app_command, **options)
+        self.defer = defer
         self.no_category: str = no_category
         self.per_page: int = per_page
         self.inline_fields = inline_fields
@@ -383,6 +384,8 @@ class MenuHelpCommand(HelpHybridCommand):
         group: :class:`~discord.ext.commands.Group`
             The group instance that was requested.
         """
+        if self.defer:
+            await self.context.defer()
         view = await self.view_provider.provide_group_view(group)
         await self.initiate_view(view)
 
