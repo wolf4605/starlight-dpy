@@ -682,12 +682,48 @@ class HelpHybridCommand(commands.HelpCommand):
 
     #     return mapping
         
+    # def get_all_commands(self) -> Dict[Optional[commands.Cog], List[CommandTextApp]]:
+    #     """Retrieves both the text command and app command bot mapping.
+
+    #     Returns
+    #     --------
+
+    #         Dict[Optional[:class:`~discord.ext.commands.Cog`], List[Union[:class:`~discord.ext.commands.Command`, :class:`~discord.app_commands.Command`, :class:`~discord.app_commands.Group`]]
+    #             A mapping of cog with text and app commands associated with it.
+    #     """
+    #     mapping = self.get_bot_mapping()
+    #     if self.include_apps:
+    #         app_mapping = self.get_bot_app_mapping()
+    #         for cog, app_cmds in app_mapping.items():
+    #             mapping.setdefault(cog, []).extend(app_cmds)
+
+    #     for cog, cmds in list(mapping.items()):
+    #         if cmds and cog:
+    #             subcommands = []
+    #             for cmd in cmds:
+    #                 if isinstance(cmd, commands.Group):
+    #                     subcommands.extend(cmd.commands)
+    #                 else:
+    #                     subcommands.append(cmd)
+    #             mapping[cog] = subcommands
+
+    #     return mapping
+
+
+    def get_all_subcommands(self, command):
+        """Recursively gets all subcommands of a command."""
+        if isinstance(command, commands.Group):
+            subcommands = command.commands
+            for subcommand in subcommands:
+                yield from self.get_all_subcommands(subcommand)
+        else:
+            yield command
+
     def get_all_commands(self) -> Dict[Optional[commands.Cog], List[CommandTextApp]]:
         """Retrieves both the text command and app command bot mapping.
 
         Returns
         --------
-
             Dict[Optional[:class:`~discord.ext.commands.Cog`], List[Union[:class:`~discord.ext.commands.Command`, :class:`~discord.app_commands.Command`, :class:`~discord.app_commands.Group`]]
                 A mapping of cog with text and app commands associated with it.
         """
@@ -701,10 +737,7 @@ class HelpHybridCommand(commands.HelpCommand):
             if cmds and cog:
                 subcommands = []
                 for cmd in cmds:
-                    if isinstance(cmd, commands.Group):
-                        subcommands.extend(cmd.commands)
-                    else:
-                        subcommands.append(cmd)
+                    subcommands.extend(self.get_all_subcommands(cmd))
                 mapping[cog] = subcommands
 
         return mapping
